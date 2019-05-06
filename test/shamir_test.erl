@@ -21,7 +21,7 @@ hello_test() ->
     shamir(<<"hello">>, 3, 4).
 
 key_test() ->
-    shamir(crypto:rand_bytes(32), 3, 15).
+    shamir(crypto:strong_rand_bytes(32), 3, 15).
 
 shamir(Secret, Threshold, Count) ->
     Shares = shamir:share(Secret, Threshold, Count),
@@ -41,8 +41,8 @@ proper_test_() ->
 prop_secrets() ->
     ?FORALL(Secret, secret(),
             begin
-                Threshold = random:uniform(10),
-                Count = Threshold * random:uniform(10),
+                Threshold = rand:uniform(10),
+                Count = Threshold * rand:uniform(10),
                 Shares = shamir:share(Secret, Threshold, Count),
                 RecoveredSecret = shamir:recover(
                                     lists:sublist(
@@ -52,7 +52,7 @@ prop_secrets() ->
            ).
 
 secret() ->
-    crypto:rand_bytes(1 + random:uniform(64)).
+    crypto:strong_rand_bytes(1 + rand:uniform(64)).
 
 shuffle(List) ->
     %% Determine the log n portion then randomize the list.
@@ -67,7 +67,7 @@ randomize(T, List) ->
 
 randomize(List) ->
     D = lists:map(fun(A) ->
-                          {random:uniform(), A}
+                          {rand:uniform(), A}
                   end, List),
     {_, D1} = lists:unzip(lists:keysort(1, D)),
     D1.
