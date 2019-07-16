@@ -13,7 +13,7 @@
 %% limitations under the License.
 
 -record(share, {
-    threshold,
-    x,
-    y
+    threshold :: pos_integer(),
+    x :: pos_integer(),
+    y :: binary()
 }).
